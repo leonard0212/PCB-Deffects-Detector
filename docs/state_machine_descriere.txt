@@ -1,0 +1,7 @@
+Stările Aplicației:
+1. INIT: Încărcare biblioteci și model YOLO.
+2. IDLE: Așteptare input utilizator.
+3. LOAD_IMG: Utilizatorul selectează fișierul, se face resize.
+4. PROCESS: Modelul YOLO face inferența pe imagine.
+5. DISPLAY: Se desenează bounding boxes și se actualizează GUI.
+6. ERROR: Gestionare excepții (fișier lipsă, model corupt).

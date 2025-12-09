@@ -1,128 +1,104 @@
-# Sistem de Inspecție Optică Automată (AOI) pentru PCB  
-Detecție Defecte de Sudură cu Raspberry Pi 5 + YOLOv11
+# 📘 Proiect SIA – Sistem de Detecție Defecte PCB
 
-Acest proiect implementează un sistem de inspecție optică automată (AOI) pentru plăci electronice (PCB), utilizând Raspberry Pi 5 și algoritmi avansați de viziune computerizată (YOLOv11). Sistemul rulează autonom (edge computing), oferă feedback vizual în timp real și semnalizare hardware prin GPIO.
-
----
-
-## 🔍 Funcționalități
-
-Sistemul capturează imagini de înaltă calitate, le procesează cu o rețea neurală antrenată și identifică următoarele defecte:
-
-- **Solder Bridge** – scurtcircuit între pini  
-- **Cold Joint** – lipitură rece / granulată  
-- **Missing Component** – componentă lipsă  
-- **Excess Solder** – cositor în exces  
-
-Rezultatele sunt afișate în două moduri:
-- într-o **interfață web locală**,  
-- printr-un **LED/releu** conectat la GPIO.
+**Disciplina:** Rețele Neuronale  
+**Etapa:** 4 - Dezvoltarea Arhitecturii Aplicației Software  
+**Student:** Popescu Leonard  
+**Grupa:** 631AB  
+**Data:** 09.12.2025
 
 ---
 
-## 🧰 Cerințe Hardware
+## Descriere
 
-| Componentă | Detalii recomandate |
-|-----------|----------------------|
-| **Unitate procesare** | Raspberry Pi 5 (8 GB RAM recomandat), cu răcire activă |
-| **Cameră** | Raspberry Pi HQ Camera / Arducam IMX477 |
-| **Optică** | Lentilă macro cu distanță focală fixă |
-| **Iluminare** | Ring light difuz pentru eliminarea reflexiilor |
+Sistem cu Inteligență Artificială (SIA) pentru detectarea defectelor de fabricație pe plăcile de circuite imprimate (PCB). Aplicația folosește o arhitectură modulară (OOP) și integrează un model YOLOv11 într-o interfață grafică (Tkinter).
+
+Scopul etapei 4: livrarea unui schelet funcțional Pipeline: Date -> Model -> UI.
 
 ---
 
-## ⚙️ Instalare
+## Structura proiectului
 
-### 1. Actualizare sistem
-```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install libatlas-base-dev python3-opencv -y
 ```
-
-### 2. Configurare proiect
-```bash
-# Creare director proiect
-mkdir aoi_system && cd aoi_system
-
-# Creare și activare mediu virtual
-python3 -m venv venv
-source venv/bin/activate
+Proiect_PCB_SIA/
+├── data/
+│   ├── raw/
+│   └── processed/
+├── docs/
+│   ├── state_machine.png
+│   └── screenshots/
+├── models/
+│   └── best.pt
+├── src/
+│   ├── data_acquisition/
+│   │   └── loader.py
+│   ├── neural_network/
+│   │   └── yolo_wrapper.py
+│   └── ui/
+│       └── app_gui.py
+├── main.py
+└── README.md
 ```
-
-### 3. Instalare librării Python
-```bash
-pip install ultralytics opencv-python-headless flask RPi.GPIO
-```
-
-### 4. Integrare model AI
-Plasați în directorul proiectului fișierul modelului YOLO antrenat (`best.pt` sau modelul exportat NCNN).
 
 ---
 
-## ▶️ Utilizare
+## Arhitectura și fluxul aplicației
 
-### Pornire sistem
-```bash
-python app_inspectie.py
-```
+Aplicația are 3 module principale în `src/`:
 
-### Accesare interfață web
-Introduceți în browser, de pe un dispozitiv în aceeași rețea:
-```
-http://<IP_RASPBERRY_PI>:5000
-```
+- data_acquisition: descărcare/gestionare dataset (Roboflow).
+- neural_network: wrapper pentru modelul YOLO (fișier `yolo_wrapper.py`).
+- ui: interfața grafică (Tkinter) cu încărcare imagine, slider pentru confidence, buton detectare și vizualizare rezultate.
 
-Interfața afișează:
-- fluxul video live,  
-- bounding boxes peste defectele detectate,  
-- starea curentă a plăcii (OK / DEFECT).
+Stări principale (rezumat):
+- Initialization: verifică folderele și modelul `models/best.pt`.
+- Idle: așteaptă input utilizator.
+- Image Loading: încărcare și validare imagine.
+- AI Processing: conversie -> predict (clasa PCBModel).
+- Result Visualization: desenare bounding boxes și afișare.
+- Error Handling: pop-up la excepții.
 
----
-
-## 🔧 Configurare Parametri
-
-Parametrii principali se modifică în `app_inspectie.py`:
-
-| Variabilă | Descriere |
-|-----------|-----------|
-| `MODEL_PATH` | Calea către model (.pt / .onnx / ncnn) |
-| `CAMERA_ID` | Indexul camerei (implicit 0) |
-| `CONFIDENCE_THRESHOLD` | Prag detectare (0.0–1.0) |
-| `IO_RELAY_PIN` | Pin BCM pentru semnalizarea externă |
+Diagrama completă: `docs/state_machine.png`.
 
 ---
 
-## ⚡ Optimizare Performanță
+## Detalii tehnice pe module
 
-Raspberry Pi nu rulează eficient modele `.pt`. Pentru 15–30 FPS, exportați modelul în format **NCNN**:
-
-```python
-from ultralytics import YOLO
-
-model = YOLO('best.pt')
-model.export(format='ncnn')
-```
-
-Copiați folderul NCNN pe Raspberry Pi și actualizați `MODEL_PATH`.
+- Modul 1 — Data Acquisition (`src/data_acquisition`): DatasetLoader (Roboflow), format YOLO (imagini + .txt).
+- Modul 2 — Neural Network (`src/neural_network`): YOLOv11n (wrapper `PCBModel`), optimizat pentru CPU.
+- Modul 3 — UI (`src/ui`): Tkinter, slider pentru prag de încredere, afișare imagine și status.
 
 ---
 
-## 🛠️ Troubleshooting
+## Cerințe și instalare (Windows)
 
-### ❌ Eroare: `libGL.so.1` lipsește
-```bash
-sudo apt install libgl1-mesa-glx
+- OS: Windows 10/11  
+- Python: 3.11 (recomandat pentru compatibilitate PyTorch/Ultralytics)
+
+1. Deschide PowerShell sau CMD în folderul proiectului:
+```powershell
+py -3.11 -m pip install --upgrade pip
+py -3.11 -m pip install ultralytics pillow opencv-python roboflow
 ```
 
-### 🔥 Supraîncălzire
-- utilizați răcire activă (ventilator),  
-- fără ventilator apare **thermal throttling**, scăzând performanța.
+2. Plasează modelul antrenat:
+- Copiază `best.pt` în `Proiect_PCB_SIA/models/best.pt`.
 
-### 📷 Imagine neclară
-- ajustați manual focalizarea lentilei;  
-- textul de pe PCB trebuie să fie perfect clar pentru detecții corecte.
+3. Rulează aplicația:
+```powershell
+py -3.11 main.py
+```
 
 ---
 
-## 📄 Licență
-Acest proiect poate fi utilizat și modificat liber, conform licenței alese în repository.
+## Observații
+
+- Dataset raw poate să nu fie prezent (antrenare făcută în Google Colab).
+- Ajustați pragul de încredere din UI pentru a regla sensibilitatea detectării.
+- Logica modelului este încapsulată în `yolo_wrapper.py` pentru a permite înlocuirea ulterioară fără modificări majore în UI.
+
+---
+
+## Contact / Autor
+Popescu Leonard — Grupa 631AB
+
+---
