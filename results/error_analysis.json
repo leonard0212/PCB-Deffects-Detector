@@ -1,0 +1,56 @@
+{
+    "total_test_images": 150,
+    "total_predictions": 187,
+    "total_ground_truth": 192,
+    "true_positives": 183,
+    "false_positives": 4,
+    "false_negatives": 9,
+    "overall_accuracy": 0.9531,
+    "error_rate": 0.0469,
+    "per_class_errors": {
+        "missing_hole": {
+            "fp": 0,
+            "fn": 1,
+            "common_confusion": null
+        },
+        "mouse_bite": {
+            "fp": 1,
+            "fn": 1,
+            "common_confusion": "spur"
+        },
+        "open_circuit": {
+            "fp": 0,
+            "fn": 2,
+            "common_confusion": null,
+            "notes": "Defecte foarte subțiri, greu de detectat"
+        },
+        "short": {
+            "fp": 1,
+            "fn": 1,
+            "common_confusion": "spurious_copper"
+        },
+        "spur": {
+            "fp": 1,
+            "fn": 2,
+            "common_confusion": "spurious_copper",
+            "notes": "Cele mai frecvente confuzii inter-clasă"
+        },
+        "spurious_copper": {
+            "fp": 1,
+            "fn": 2,
+            "common_confusion": "spur",
+            "notes": "Similar vizual cu spur, necesită augmentări specifice"
+        }
+    },
+    "size_analysis": {
+        "small_objects_missed": 5,
+        "medium_objects_missed": 3,
+        "large_objects_missed": 1,
+        "notes": "Obiectele mici (< 20px) au cel mai mare rate de miss"
+    },
+    "recommendations": [
+        "Augmentări suplimentare pentru spur/spurious_copper",
+        "Creștere rezoluție input la 1280 pentru obiecte mici",
+        "Antrenare model mai mare (YOLOv11s) pentru precizie localizare"
+    ]
+}

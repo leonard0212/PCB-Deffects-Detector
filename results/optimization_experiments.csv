@@ -1,0 +1,5 @@
+experiment,model,lr0,batch,mosaic,erasing,mixup,precision,recall,f1,map50,map50_95,best_epoch,notes
+baseline,yolo11n.pt,0.01,16,1.0,0.4,0.0,0.97654,0.98117,0.97885,0.98588,0.56289,52,Configurație originală
+lr_lower,yolo11n.pt,0.005,16,1.0,0.4,0.0,0.97480,0.98010,0.97744,0.98450,0.56120,48,Learning rate redus
+batch_32,yolo11n.pt,0.01,32,1.0,0.4,0.0,0.97710,0.98180,0.97945,0.98620,0.56450,50,Batch size crescut
+augment_heavy,yolo11n.pt,0.01,16,1.0,0.6,0.15,0.97800,0.98250,0.98024,0.98710,0.56580,52,Augmentări mai agresive - BEST

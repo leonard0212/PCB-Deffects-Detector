@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# OS
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Data (datele mari se exclud din Git)
+data/raw/*
+data/processed/*
+data/generated/*
+data/train/*
+data/validation/*
+data/test/*
+!data/**/.gitkeep
+!data/README.md
+
+# Modele (fișierele .pt/.h5 sunt prea mari pentru Git)
+models/*.pt
+models/*.h5
+models/*.onnx
+!models/.gitkeep
+
+# Rezultate temporare
+*.jpg
+*.jpeg
+test_detection_result.*
+
+# Jupyter
+.ipynb_checkpoints/
+
+# PyTorch
+runs/
+wandb/
+
+# Logs
+*.log

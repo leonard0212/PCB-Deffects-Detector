@@ -1,0 +1,67 @@
+# optimized_config.yaml - Configurație finală model optimizat (Etapa 6)
+
+# === Model ===
+model: yolo11n.pt
+task: detect
+mode: train
+
+# === Dataset ===
+data: data.yaml
+imgsz: 640
+
+# === Antrenare ===
+epochs: 100
+patience: 25
+batch: 16
+optimizer: auto
+lr0: 0.01
+lrf: 0.01
+momentum: 0.937
+weight_decay: 0.0005
+warmup_epochs: 3.0
+warmup_momentum: 0.8
+warmup_bias_lr: 0.0
+cos_lr: false
+close_mosaic: 10
+amp: true
+deterministic: true
+seed: 0
+
+# === Loss Weights ===
+box: 7.5
+cls: 0.5
+dfl: 1.5
+
+# === Augmentări Optimizate (Etapa 6) ===
+hsv_h: 0.015
+hsv_s: 0.7
+hsv_v: 0.4
+degrees: 0.0
+translate: 0.1
+scale: 0.5
+shear: 0.0
+perspective: 0.0
+flipud: 0.0
+fliplr: 0.5
+bgr: 0.0
+mosaic: 1.0
+mixup: 0.15           # Crescut de la 0.0 (optimizare)
+erasing: 0.6           # Crescut de la 0.4 (optimizare)
+auto_augment: randaugment
+
+# === Validare ===
+val: true
+split: val
+iou: 0.7
+max_det: 300
+
+# === Salvare ===
+save: true
+plots: true
+save_json: false
+save_txt: false
+save_conf: false
+
+# === Inferență (deployment) ===
+confidence_threshold: 0.45
+nms_iou_threshold: 0.7
